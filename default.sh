@@ -1,14 +1,19 @@
 #!/bin/bash
 set -x
+
+USE_DONE_FILE=false  # Turn on by assigning to true
+
 mkdir -p ${WORK_DIR}
 cd ${WORK_DIR}
 
 ssh xcfl00 ls /critical/opfc/suites-oper/global/share/data/*/glm_um/umglaa_pa054.done > done.files
 DATES=$(cat done.files | cut -d '/' -f 8)
 for DATE in ${DATES} ; do
-    DONE_FILE=${WORK_DIR}/../${DATE}.done
-    if [[ -e ${DONE_FILE} ]] ; then
-        continue
+    if [[ $USE_DONE_FILE == true ]] ; then
+        DONE_FILE=${WORK_DIR}/../${DATE}.done
+        if [[ -e ${DONE_FILE} ]] ; then
+            continue
+        fi
     fi
     mkdir -p ${WORK_DIR}/${DATE}
     cd ${WORK_DIR}/${DATE}
@@ -38,5 +43,7 @@ for DATE in ${DATES} ; do
     fi
     done
 
-    touch ${DONE_FILE}
+    if [[ $USE_DONE_FILE == true ]] ; then
+        touch ${DONE_FILE}
+    fi
 done
