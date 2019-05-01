@@ -24,7 +24,7 @@ def parse_args(argv=None):
 def main(argv=None):
     args = parse_args(argv=argv)
     print("Reading data from {}".format(args.in_file))
-    raw_cube = iris.load_cube(args.in_file)
+    raw_cube = iris.load(args.in_file)
     print("Extracting N, S, E, W - {}, {}, {}, {}".format(args.north,
                                                           args.south,
                                                           args.east,
