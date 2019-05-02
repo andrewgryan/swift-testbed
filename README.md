@@ -6,7 +6,7 @@ Patched scripts to supply Forest with data for Africa Swift meeting. Operational
 
 The following snippets can be used to convert the slow processing task `highway_testbed` into 19 small tasks that can each send one file to AWS
 
-### 1: Define HOURS
+### 1: Define HOURS at the top of suite.rc
 ```
 {% set HOURS = [
     '000',
