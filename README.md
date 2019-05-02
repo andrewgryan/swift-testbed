@@ -4,7 +4,7 @@ Patched scripts to supply Forest with data for Africa Swift meeting. Operational
 
 # Suite.rc changes to parallelise slow processing
 
-Snippets to demonstrate partitioning UM tasks
+The following snippets can be used to convert the slow processing task `highway_testbed` into 19 small tasks that can each send one file to AWS
 
 ### 1: Define HOURS
 ```
@@ -49,7 +49,7 @@ The various graph dependencies can be replicated with a loop
 so that the AWS task waits for the processing tasks to complete
 or a separate AWS task can be invoked for each file
 
-### Step 3: Update CLOCK_TRIGGERED task list
+### 3: Update CLOCK_TRIGGERED task list
 
 ```
 {% set TASKS = [] %}
