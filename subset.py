@@ -23,21 +23,27 @@ def parse_args(argv=None):
 
 def main(argv=None):
     args = parse_args(argv=argv)
+    constraint = iris.Constraint(
+            latitude=lambda cell: args.south < cell < args.north,
+            longitude=lambda cell: args.west < cell < args.east)
     print("Reading data from {}".format(args.in_file))
-    raw_cube = iris.load(args.in_file)
-    print("Extracting N, S, E, W - {}, {}, {}, {}".format(args.north,
-                                                          args.south,
-                                                          args.east,
-                                                          args.west))
-    # constraint = iris.Constraint(
-    #     latitude=lambda cell: args.south < cell < args.north,
-    #     longitude=lambda cell: args.west < cell < args.east)
-    # sub_cube = raw_cube.extract(constraint)
-    sub_cube = raw_cube.intersection(
-        longitude=(args.west, args.east),
-        latitude=(args.south, args.north))
+    cubes = iris.load(args.in_file)
+    print("N, S, E, W: {}".format(
+        (args.north, args.south, args.east, args.west)))
+    # Cut out a domain
+    small_cubes = []
+    for cube in cubes:
+        print(cube.name())
+        try:
+            small_cube = cube.intersection(
+                longitude=(args.west, args.east),
+                latitude=(args.south, args.north))
+        except:
+            small_cube = cube.extract(constraint)
+        small_cubes.append(cube)
+
     print("Writing subset to {}".format(args.out_file))
-    iris.fileformats.netcdf.save(sub_cube, args.out_file, zlib=True)
+    iris.save(small_cubes, args.out_file)
 
 
 if __name__ == '__main__':
