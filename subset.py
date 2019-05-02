@@ -40,7 +40,9 @@ def main(argv=None):
                 latitude=(args.south, args.north))
         except:
             small_cube = cube.extract(constraint)
-        small_cubes.append(small_cube)
+        if small_cube is not None:
+            print(small_cube)
+            small_cubes.append(small_cube)
 
     print("Writing subset to {}".format(args.out_file))
     iris.save(small_cubes, args.out_file)
