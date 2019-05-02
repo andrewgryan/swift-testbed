@@ -33,13 +33,13 @@ The following snippets can be used to convert the slow processing task `highway_
 
 The above variable can be used for iteration in the rest of suite.rc
 
-### 2: Update graphs
+### 2: Update graph dependencies
 
 ```
 [[T1H]]]
 graph = """
-{% for HOUR in HOURS %}
-    highway_testbed_{{HOUR}}:finish => highway_testbed_aws
+{% for H in HOURS %}
+    highway_testbed_{{H}}:finish => highway_testbed_aws
     ...
 {% endfor %}
 """
@@ -47,7 +47,7 @@ graph = """
 
 The various graph dependencies can be replicated with a loop
 so that the AWS task waits for the processing tasks to complete
-or a separate AWS task can be invoked for each file
+or a separate AWS task can be invoked for each file.
 
 ### 3: Update CLOCK_TRIGGERED task list
 
@@ -60,7 +60,12 @@ CLOCK_TRIGGERED = {{ TASKS | join(' ') }}
 ```
 
 This is tricky due to Jinja2's scoping rules, but in my previous experience
-`do` statements can be used to append to lists
+`do` statements can be used to append to lists. To know whether or not this
+has worked try
+
+```
+cat ~meso/cylc-run/forest/suite.rc.processed | grep --color CLOCK
+```
 
 ### 4: Define additional tasks almost identical to the single task case
 
